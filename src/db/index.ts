@@ -64,8 +64,7 @@ const mapPlace = (row: any): Place => ({
   description: row.description ?? null,
   visitLater: row.visit_later === 1,
   liked: row.liked === 1,
-  latitude: row.latitude ?? null,
-  longitude: row.longitude ?? null,
+  dd: row.dd ?? null,
   createdAt: row.created_at,
 });
 
@@ -124,21 +123,19 @@ export const addPlace = async (place: {
   description?: string;
   visitLater?: boolean;
   liked?: boolean;
-  latitude?: number | null;
-  longitude?: number | null;
+  dd?: string | null;
 }) => {
   const db = await getDatabase();
   const createdAt = new Date().toISOString();
   const result = await db.runAsync(
-    `INSERT INTO places (name, description, visit_later, liked, latitude, longitude, created_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?)`,
+    `INSERT INTO places (name, description, visit_later, liked, dd, created_at)
+     VALUES (?, ?, ?, ?, ?, ?)`,
     [
       place.name,
       place.description ?? null,
       place.visitLater ? 1 : 0,
       place.liked ? 1 : 0,
-      place.latitude ?? null,
-      place.longitude ?? null,
+      place.dd ?? null,
       createdAt,
     ]
   );
@@ -248,7 +245,7 @@ export const markTripPlaceVisited = async (tripPlaceId: number) => {
 export const getNextTripPlace = async () => {
   const db = await getDatabase();
   const rows = await db.getAllAsync<any>(
-    `SELECT tp.*, p.name as place_name, p.description as place_description, p.latitude, p.longitude
+    `SELECT tp.*, p.name as place_name, p.description as place_description, p.dd
      FROM trip_places tp
      JOIN trips t ON t.id = tp.trip_id
      JOIN places p ON p.id = tp.place_id
@@ -265,7 +262,6 @@ export const getNextTripPlace = async () => {
     ...mapTripPlace(row),
     placeName: row.place_name as string,
     placeDescription: row.place_description as string | null,
-    latitude: row.latitude as number | null,
-    longitude: row.longitude as number | null,
+    dd: row.dd as string | null,
   };
 };

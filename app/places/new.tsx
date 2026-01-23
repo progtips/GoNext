@@ -9,8 +9,7 @@ export default function NewPlaceScreen() {
   const [description, setDescription] = useState('');
   const [visitLater, setVisitLater] = useState(true);
   const [liked, setLiked] = useState(false);
-  const [latitude, setLatitude] = useState('');
-  const [longitude, setLongitude] = useState('');
+  const [dd, setDd] = useState('');
 
   const handleSave = async () => {
     if (!name.trim()) {
@@ -22,8 +21,7 @@ export default function NewPlaceScreen() {
       description: description.trim() || undefined,
       visitLater,
       liked,
-      latitude: latitude ? Number(latitude) : null,
-      longitude: longitude ? Number(longitude) : null,
+      dd: dd.trim() || null,
     });
     router.back();
   };
@@ -53,18 +51,7 @@ export default function NewPlaceScreen() {
           <Switch value={liked} onValueChange={setLiked} />
         </Surface>
 
-        <TextInput
-          label="Широта"
-          value={latitude}
-          onChangeText={setLatitude}
-          keyboardType="numeric"
-        />
-        <TextInput
-          label="Долгота"
-          value={longitude}
-          onChangeText={setLongitude}
-          keyboardType="numeric"
-        />
+        <TextInput label="DD (Decimal Degrees)" value={dd} onChangeText={setDd} />
 
         <Button mode="contained" onPress={handleSave}>
           Сохранить

@@ -4,8 +4,7 @@ export type Place = {
   description: string | null;
   visitLater: boolean;
   liked: boolean;
-  latitude: number | null;
-  longitude: number | null;
+  dd: string | null;
   createdAt: string;
 };
 

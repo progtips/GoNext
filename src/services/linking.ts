@@ -1,7 +1,9 @@
 import * as Linking from 'expo-linking';
 
-export const openInMaps = (latitude: number, longitude: number, label?: string) => {
+export const openInMaps = (dd: string, label?: string) => {
   const encodedLabel = label ? encodeURIComponent(label) : 'Place';
-  const url = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}(${encodedLabel})`;
+  const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+    dd
+  )}(${encodedLabel})`;
   return Linking.openURL(url);
 };

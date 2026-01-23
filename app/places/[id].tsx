@@ -66,16 +66,11 @@ export default function PlaceDetailsScreen() {
           <>
             <Text variant="titleMedium">{place.name}</Text>
             <Text>{place.description ?? 'Без описания'}</Text>
-            <Text>
-              Координаты: {place.latitude ?? '—'}, {place.longitude ?? '—'}
-            </Text>
+            <Text>DD: {place.dd ?? '—'}</Text>
             <Text>В планах: {place.visitLater ? 'да' : 'нет'}</Text>
             <Text>Понравилось: {place.liked ? 'да' : 'нет'}</Text>
-            {place.latitude != null && place.longitude != null ? (
-              <Button
-                mode="contained"
-                onPress={() => openInMaps(place.latitude!, place.longitude!, place.name)}
-              >
+            {place.dd ? (
+              <Button mode="contained" onPress={() => openInMaps(place.dd, place.name)}>
                 Открыть на карте
               </Button>
             ) : null}
