@@ -29,3 +29,10 @@ export type TripPlace = {
   notes: string | null;
   createdAt: string;
 };
+
+export type PlacePhoto = {
+  id: number;
+  placeId: number;
+  uri: string;
+  createdAt: string;
+};

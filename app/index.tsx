@@ -16,19 +16,36 @@ export default function HomeScreen() {
           alignItems: 'center',
           padding: 24,
           gap: 12,
+          width: '100%',
         }}
       >
         <Text variant="titleMedium">GoNext — дневник туриста</Text>
-        <Button mode="contained" onPress={() => router.push('/places')}>
+        <Button
+          mode="contained"
+          onPress={() => router.push('/places')}
+          style={{ alignSelf: 'stretch' }}
+        >
           Места
         </Button>
-        <Button mode="contained" onPress={() => router.push('/trips')}>
+        <Button
+          mode="contained"
+          onPress={() => router.push('/trips')}
+          style={{ alignSelf: 'stretch' }}
+        >
           Поездки
         </Button>
-        <Button mode="contained" onPress={() => router.push('/next')}>
+        <Button
+          mode="contained"
+          onPress={() => router.push('/next')}
+          style={{ alignSelf: 'stretch' }}
+        >
           Следующее место
         </Button>
-        <Button mode="contained" onPress={() => router.push('/settings')}>
+        <Button
+          mode="contained"
+          onPress={() => router.push('/settings')}
+          style={{ alignSelf: 'stretch' }}
+        >
           Настройки
         </Button>
       </Surface>
