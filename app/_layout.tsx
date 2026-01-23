@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { ImageBackground } from 'react-native';
 import { Stack } from 'expo-router';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { PaperProvider } from 'react-native-paper';
@@ -13,7 +14,13 @@ export default function RootLayout() {
   return (
     <PaperProvider>
       <SafeAreaProvider>
-        <Stack screenOptions={{ headerShown: false }} />
+        <ImageBackground
+          source={require('../assets/backgrounds/gonext-bg.png')}
+          style={{ flex: 1 }}
+          resizeMode="cover"
+        >
+          <Stack screenOptions={{ headerShown: false }} />
+        </ImageBackground>
       </SafeAreaProvider>
     </PaperProvider>
   );

@@ -1,15 +1,15 @@
+import { View } from 'react-native';
 import { router } from 'expo-router';
-import { Appbar, Button, Surface, Text } from 'react-native-paper';
+import { Appbar, Button, Text } from 'react-native-paper';
 
 export default function HomeScreen() {
   return (
-    <Surface style={{ flex: 1 }}>
-      <Appbar.Header>
+    <View style={{ flex: 1, padding: 16 }}>
+      <Appbar.Header style={{ backgroundColor: 'transparent' }}>
         <Appbar.Content title="GoNext" />
       </Appbar.Header>
 
-      <Surface
-        elevation={0}
+      <View
         style={{
           flex: 1,
           justifyContent: 'center',
@@ -48,7 +48,7 @@ export default function HomeScreen() {
         >
           Настройки
         </Button>
-      </Surface>
-    </Surface>
+      </View>
+    </View>
   );
 }
