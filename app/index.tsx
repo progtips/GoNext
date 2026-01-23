@@ -1,7 +1,7 @@
 import { router } from 'expo-router';
 import { Appbar, Button, Surface, Text } from 'react-native-paper';
 
-export default function Home() {
+export default function HomeScreen() {
   return (
     <Surface style={{ flex: 1 }}>
       <Appbar.Header>
