@@ -142,6 +142,32 @@ export const addPlace = async (place: {
   return result.lastInsertRowId ?? null;
 };
 
+export const updatePlace = async (
+  placeId: number,
+  updates: {
+    name: string;
+    description?: string;
+    visitLater?: boolean;
+    liked?: boolean;
+    dd?: string | null;
+  }
+) => {
+  const db = await getDatabase();
+  await db.runAsync(
+    `UPDATE places
+     SET name = ?, description = ?, visit_later = ?, liked = ?, dd = ?
+     WHERE id = ?`,
+    [
+      updates.name,
+      updates.description ?? null,
+      updates.visitLater ? 1 : 0,
+      updates.liked ? 1 : 0,
+      updates.dd ?? null,
+      placeId,
+    ]
+  );
+};
+
 export const addPlacePhoto = async (placeId: number, uri: string) => {
   const db = await getDatabase();
   const createdAt = new Date().toISOString();
@@ -151,6 +177,25 @@ export const addPlacePhoto = async (placeId: number, uri: string) => {
     [placeId, uri, createdAt]
   );
   return result.lastInsertRowId ?? null;
+};
+
+export const deletePlacePhoto = async (photoId: number) => {
+  const db = await getDatabase();
+  await db.runAsync('DELETE FROM place_photos WHERE id = ?', [photoId]);
+};
+
+export const deletePlace = async (placeId: number) => {
+  const db = await getDatabase();
+  await withTransaction(db, async () => {
+    await db.runAsync(
+      `DELETE FROM trip_place_photos
+       WHERE trip_place_id IN (SELECT id FROM trip_places WHERE place_id = ?)`,
+      [placeId]
+    );
+    await db.runAsync('DELETE FROM trip_places WHERE place_id = ?', [placeId]);
+    await db.runAsync('DELETE FROM place_photos WHERE place_id = ?', [placeId]);
+    await db.runAsync('DELETE FROM places WHERE id = ?', [placeId]);
+  });
 };
 
 export const getTrips = async (): Promise<Trip[]> => {

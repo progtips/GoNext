@@ -13,3 +13,13 @@ export const savePhotoAsync = async (sourceUri: string) => {
   await FileSystem.copyAsync({ from: sourceUri, to: destination });
   return destination;
 };
+
+export const deletePhotoAsync = async (uri: string) => {
+  if (!FileSystem.documentDirectory) {
+    return;
+  }
+  const info = await FileSystem.getInfoAsync(uri);
+  if (info.exists) {
+    await FileSystem.deleteAsync(uri, { idempotent: true });
+  }
+};

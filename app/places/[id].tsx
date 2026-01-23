@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Image } from 'react-native';
+import { Alert, Image } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import { Appbar, Button, Surface, Text } from 'react-native-paper';
 
-import { addPlacePhoto, getPlaceById, getPlacePhotos } from '../../src/db';
+import { addPlacePhoto, deletePlace, deletePlacePhoto, getPlaceById, getPlacePhotos } from '../../src/db';
 import type { Place, PlacePhoto } from '../../src/db/types';
 import { openInMaps } from '../../src/services/linking';
-import { savePhotoAsync } from '../../src/services/photos';
+import { deletePhotoAsync, savePhotoAsync } from '../../src/services/photos';
 
 export default function PlaceDetailsScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -54,11 +54,49 @@ export default function PlaceDetailsScreen() {
     loadDetails().catch(() => undefined);
   };
 
+  const handleDeletePlace = () => {
+    if (Number.isNaN(placeId)) {
+      return;
+    }
+    Alert.alert('Удалить место?', 'Все фотографии будут удалены.', [
+      { text: 'Отмена', style: 'cancel' },
+      {
+        text: 'Удалить',
+        style: 'destructive',
+        onPress: async () => {
+          await deletePlace(placeId);
+          router.back();
+        },
+      },
+    ]);
+  };
+
+  const handleDeletePhoto = (photo: PlacePhoto) => {
+    Alert.alert('Удалить фото?', '', [
+      { text: 'Отмена', style: 'cancel' },
+      {
+        text: 'Удалить',
+        style: 'destructive',
+        onPress: async () => {
+          await deletePlacePhoto(photo.id);
+          await deletePhotoAsync(photo.uri);
+          loadDetails().catch(() => undefined);
+        },
+      },
+    ]);
+  };
+
   return (
     <Surface style={{ flex: 1 }}>
       <Appbar.Header>
         <Appbar.BackAction onPress={() => router.back()} />
         <Appbar.Content title={place?.name ?? 'Место'} />
+        {place ? (
+          <>
+            <Appbar.Action icon="pencil" onPress={() => router.push(`/places/${placeId}/edit`)} />
+            <Appbar.Action icon="delete" onPress={handleDeletePlace} />
+          </>
+        ) : null}
       </Appbar.Header>
 
       <Surface style={{ flex: 1, padding: 16, gap: 12 }} elevation={0}>
@@ -88,12 +126,16 @@ export default function PlaceDetailsScreen() {
             <Text>Фотографий пока нет.</Text>
           ) : (
             photos.map((photo) => (
-              <Image
-                key={photo.id}
-                source={{ uri: photo.uri }}
-                style={{ width: '100%', height: 180, borderRadius: 12 }}
-                resizeMode="cover"
-              />
+              <Surface key={photo.id} elevation={0} style={{ gap: 8 }}>
+                <Image
+                  source={{ uri: photo.uri }}
+                  style={{ width: '100%', height: 180, borderRadius: 12 }}
+                  resizeMode="cover"
+                />
+                <Button mode="outlined" onPress={() => handleDeletePhoto(photo)}>
+                  Удалить фото
+                </Button>
+              </Surface>
             ))
           )}
         </Surface>
