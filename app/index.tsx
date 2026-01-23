@@ -1,9 +1,7 @@
-import { useState } from 'react';
-import { Appbar, Button, Snackbar, Surface, Text } from 'react-native-paper';
+import { router } from 'expo-router';
+import { Appbar, Button, Surface, Text } from 'react-native-paper';
 
 export default function Home() {
-  const [visible, setVisible] = useState(false);
-
   return (
     <Surface style={{ flex: 1 }}>
       <Appbar.Header>
@@ -20,15 +18,20 @@ export default function Home() {
           gap: 12,
         }}
       >
-        <Text variant="titleMedium">Привет, React Native Paper!</Text>
-        <Button mode="contained" onPress={() => setVisible(true)}>
-          Нажми меня
+        <Text variant="titleMedium">GoNext — дневник туриста</Text>
+        <Button mode="contained" onPress={() => router.push('/places')}>
+          Места
+        </Button>
+        <Button mode="contained" onPress={() => router.push('/trips')}>
+          Поездки
+        </Button>
+        <Button mode="contained" onPress={() => router.push('/next')}>
+          Следующее место
+        </Button>
+        <Button mode="contained" onPress={() => router.push('/settings')}>
+          Настройки
         </Button>
       </Surface>
-
-      <Snackbar visible={visible} onDismiss={() => setVisible(false)}>
-        Кнопка нажата
-      </Snackbar>
     </Surface>
   );
 }
