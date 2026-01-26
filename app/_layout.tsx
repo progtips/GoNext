@@ -1,44 +1,28 @@
-import '../global.css';
-
-import { useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Stack } from 'expo-router';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { PaperProvider, MD3LightTheme } from 'react-native-paper';
-
-import { initDatabase } from '../src/db';
-
-const theme = {
-  ...MD3LightTheme,
-  colors: {
-    ...MD3LightTheme.colors,
-    background: 'transparent',
-    surface: 'transparent',
-  },
-};
-
-export default function RootLayout() {
-  useEffect(() => {
-    initDatabase().catch(() => undefined);
-  }, []);
-
-  return (
-    <PaperProvider theme={theme}>
-      <SafeAreaProvider>
-        <View style={styles.root}>
-          <Stack
-            screenOptions={{
-              headerShown: false,
-              animation: 'none',
-              contentStyle: { backgroundColor: 'transparent' },
-            }}
-          />
-        </View>
-      </SafeAreaProvider>
-    </PaperProvider>
-  );
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
 }
 
-const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: 'transparent' },
-});
+body {
+  background: transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ФОН под всем приложением */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("/gonext-bg.png");
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  z-index: -1;
+}
+
+/* ВАЖНО: НЕ делаем #root * прозрачным — это ломает кнопки */
+#root {
+  background: transparent;
+}

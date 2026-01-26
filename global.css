@@ -10,7 +10,7 @@ body {
   overflow: hidden;
 }
 
-/* фон */
+/* ФОН под всем приложением */
 body::before {
   content: "";
   position: fixed;
@@ -22,12 +22,7 @@ body::before {
   z-index: -1;
 }
 
-/* ВАЖНО: делаем прозрачными только “обёртки” приложения,
-   но НЕ трогаем все элементы (*) — иначе ломаются кнопки */
-#root,
-#root > div,
-#root > div > div,
-#root > div > div > div {
-  background: transparent !important;
-  background-color: transparent !important;
+/* ВАЖНО: НЕ делаем #root * прозрачным — это ломает кнопки */
+#root {
+  background: transparent;
 }
