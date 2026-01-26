@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { View } from 'react-native';
 import { router } from 'expo-router';
 import { Appbar, Button, Surface, Switch, Text, TextInput } from 'react-native-paper';
 
@@ -27,13 +28,13 @@ export default function NewPlaceScreen() {
   };
 
   return (
-    <Surface style={{ flex: 1 }}>
-      <Appbar.Header>
+    <Surface style={{ flex: 1, backgroundColor: 'transparent' }}>
+      <Appbar.Header style={{ backgroundColor: 'transparent' }}>
         <Appbar.BackAction onPress={() => router.back()} />
         <Appbar.Content title="Новое место" />
       </Appbar.Header>
 
-      <Surface style={{ flex: 1, padding: 16, gap: 12 }} elevation={0}>
+      <View style={{ flex: 1, padding: 16, gap: 12 }}>
         <TextInput label="Название" value={name} onChangeText={setName} />
         <TextInput
           label="Описание"
@@ -56,7 +57,7 @@ export default function NewPlaceScreen() {
         <Button mode="contained" onPress={handleSave}>
           Сохранить
         </Button>
-      </Surface>
+      </View>
     </Surface>
   );
 }

@@ -19,7 +19,12 @@ export default function RootLayout() {
           style={{ flex: 1 }}
           resizeMode="cover"
         >
-          <Stack screenOptions={{ headerShown: false }} />
+          <Stack
+            screenOptions={{
+              headerShown: false,
+              contentStyle: { backgroundColor: 'transparent' },
+            }}
+          />
         </ImageBackground>
       </SafeAreaProvider>
     </PaperProvider>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Alert, Image } from 'react-native';
+import { Alert, Image, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import { Appbar, Button, Surface, Text } from 'react-native-paper';
@@ -87,8 +87,8 @@ export default function PlaceDetailsScreen() {
   };
 
   return (
-    <Surface style={{ flex: 1 }}>
-      <Appbar.Header>
+    <Surface style={{ flex: 1, backgroundColor: 'transparent' }}>
+      <Appbar.Header style={{ backgroundColor: 'transparent' }}>
         <Appbar.BackAction onPress={() => router.back()} />
         <Appbar.Content title={place?.name ?? 'Место'} />
         {place ? (
@@ -99,7 +99,7 @@ export default function PlaceDetailsScreen() {
         ) : null}
       </Appbar.Header>
 
-      <Surface style={{ flex: 1, padding: 16, gap: 12 }} elevation={0}>
+      <View style={{ flex: 1, padding: 16, gap: 12 }}>
         {place ? (
           <>
             <Text variant="titleMedium">{place.name}</Text>
@@ -117,7 +117,7 @@ export default function PlaceDetailsScreen() {
           <Text>Место не найдено.</Text>
         )}
 
-        <Surface elevation={0} style={{ gap: 12 }}>
+        <Surface elevation={0} style={{ gap: 12, backgroundColor: 'transparent' }}>
           <Text variant="labelMedium">Фотографии</Text>
           <Button mode="outlined" onPress={handleAddPhoto}>
             Добавить фото
@@ -139,7 +139,7 @@ export default function PlaceDetailsScreen() {
             ))
           )}
         </Surface>
-      </Surface>
+      </View>
     </Surface>
   );
 }

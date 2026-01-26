@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
+import { View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
 import { Appbar, Button, List, Surface, Switch, Text } from 'react-native-paper';
 
@@ -33,14 +34,14 @@ export default function PlacesScreen() {
   }, [places, filterVisitLater, filterLiked]);
 
   return (
-    <Surface style={{ flex: 1 }}>
-      <Appbar.Header>
+    <Surface style={{ flex: 1, backgroundColor: 'transparent' }}>
+      <Appbar.Header style={{ backgroundColor: 'transparent' }}>
         <Appbar.BackAction onPress={() => router.back()} />
         <Appbar.Content title="Места" />
         <Appbar.Action icon="plus" onPress={() => router.push('/places/new')} />
       </Appbar.Header>
 
-      <Surface style={{ flex: 1, padding: 16, gap: 12 }} elevation={0}>
+      <View style={{ flex: 1, padding: 16, gap: 12 }}>
         <Surface elevation={0} style={{ gap: 8 }}>
           <Surface elevation={0} style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
             <Switch value={filterVisitLater} onValueChange={setFilterVisitLater} />
@@ -72,7 +73,7 @@ export default function PlacesScreen() {
             ))}
           </List.Section>
         )}
-      </Surface>
+      </View>
     </Surface>
   );
 }
