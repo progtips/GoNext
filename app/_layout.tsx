@@ -4,33 +4,37 @@ import { useEffect } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { Stack } from 'expo-router';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { PaperProvider } from 'react-native-paper';
-import { Asset } from 'expo-asset';
+import { PaperProvider, MD3LightTheme } from 'react-native-paper';
 
+import bg from '../assets/backgrounds/gonext-bg.png';
 import { initDatabase } from '../src/db';
+
+const theme = {
+  ...MD3LightTheme,
+  colors: {
+    ...MD3LightTheme.colors,
+    background: 'transparent',
+    surface: 'transparent',
+  },
+};
 
 export default function RootLayout() {
   useEffect(() => {
     initDatabase().catch(() => undefined);
   }, []);
 
-  // Надёжнее для Web: получаем uri через expo-asset
-  const bgUri = Asset.fromModule(
-    require('../assets/backgrounds/gonext-bg.png')
-  ).uri;
-
   return (
-    <PaperProvider>
+    <PaperProvider theme={theme}>
       <SafeAreaProvider>
         <View style={styles.root}>
-          {/* ФОН отдельным слоем */}
+          {/* ФОН */}
           <Image
-            source={{ uri: bgUri }}
+            source={bg}
             resizeMode="cover"
             style={StyleSheet.absoluteFillObject}
           />
 
-          {/* КОНТЕНТ поверх */}
+          {/* КОНТЕНТ */}
           <View style={styles.content}>
             <Stack
               screenOptions={{
