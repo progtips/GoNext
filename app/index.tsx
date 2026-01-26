@@ -5,23 +5,27 @@ import { Button, Text } from 'react-native-paper';
 export default function HomeScreen() {
   return (
     <View style={styles.screen}>
-      {/* ШАПКА без Paper Appbar */}
+      {/* Заголовок */}
       <View style={styles.header}>
         <Text variant="titleLarge">GoNext</Text>
       </View>
 
+      {/* Центр */}
       <View style={styles.center}>
         <Text variant="titleMedium">GoNext — дневник туриста</Text>
 
         <Button mode="contained" onPress={() => router.push('/places')} style={styles.btn}>
           Места
         </Button>
+
         <Button mode="contained" onPress={() => router.push('/trips')} style={styles.btn}>
           Поездки
         </Button>
+
         <Button mode="contained" onPress={() => router.push('/next')} style={styles.btn}>
           Следующее место
         </Button>
+
         <Button mode="contained" onPress={() => router.push('/settings')} style={styles.btn}>
           Настройки
         </Button>
@@ -34,7 +38,7 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     padding: 16,
-    backgroundColor: 'transparent',
+    backgroundColor: 'transparent', // важно, чтобы не перекрывать фон
   },
   header: {
     paddingVertical: 8,
