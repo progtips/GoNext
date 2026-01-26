@@ -1,17 +1,10 @@
-html, body {
+html, body, #root {
   width: 100%;
   height: 100%;
   margin: 0;
+  background: transparent; /* ВАЖНО */
 }
 
 #root {
-  width: 100%;
-  height: 100%;
-  display: flex;
-}
-
-/* на всякий — все прямые обертки внутри root тоже растягиваем */
-#root > * {
-  width: 100%;
-  height: 100%;
+  position: relative;      /* ВАЖНО для absolute слоёв внутри RN-web */
 }

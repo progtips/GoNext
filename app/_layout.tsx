@@ -1,13 +1,11 @@
 import '../global.css';
 
 import { useEffect } from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import { ImageBackground, StyleSheet, View } from 'react-native';
 import { Stack } from 'expo-router';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { PaperProvider, MD3LightTheme } from 'react-native-paper';
-import { Image } from 'expo-image';
 
-import bg from '../assets/backgrounds/gonext-bg.png';
 import { initDatabase } from '../src/db';
 
 const theme = {
@@ -19,6 +17,8 @@ const theme = {
   },
 };
 
+const bg = require('../assets/backgrounds/gonext-bg.png');
+
 export default function RootLayout() {
   useEffect(() => {
     initDatabase().catch(() => undefined);
@@ -26,20 +26,18 @@ export default function RootLayout() {
 
   return (
     <PaperProvider theme={theme}>
-      <SafeAreaProvider>
+      <SafeAreaProvider style={styles.safeArea}>
         <View style={styles.root}>
-          {/* ФОН */}
-          <Image
+          {/* ФОН отдельным слоем */}
+          <ImageBackground
             source={bg}
-            style={StyleSheet.absoluteFillObject}
-            contentFit="cover"
-            // На web фиксируем "якорь" сверху, на мобиле можно оставить center
-            contentPosition={Platform.OS === 'web' ? 'top' : 'center'}
-            pointerEvents="none"
+            resizeMode="cover"
+            style={styles.bg}
+            imageStyle={styles.bgImage}
           />
 
-          {/* КОНТЕНТ */}
-          <View style={styles.content}>
+          {/* КОНТЕНТ поверх */}
+          <View style={styles.content} pointerEvents="auto">
             <Stack
               screenOptions={{
                 headerShown: false,
@@ -55,6 +53,33 @@ export default function RootLayout() {
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1 },
-  content: { flex: 1, backgroundColor: 'transparent' },
+  safeArea: {
+    flex: 1,
+  },
+  root: {
+    flex: 1,
+    position: 'relative', // важно для web
+  },
+
+  // Абсолютный фон на весь экран
+  bg: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    zIndex: 0,
+    pointerEvents: 'none',
+  },
+  bgImage: {
+    width: '100%',
+    height: '100%',
+    // если захочешь "якорь" сверху на web — сделаем отдельно через Platform
+  },
+
+  content: {
+    flex: 1,
+    zIndex: 1,
+    backgroundColor: 'transparent',
+  },
 });
