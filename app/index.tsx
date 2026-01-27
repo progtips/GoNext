@@ -1,25 +1,28 @@
 import { View, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import { Appbar, Button } from 'react-native-paper';
+import { useTranslation } from 'react-i18next';
 
 export default function HomeScreen() {
+  const { t } = useTranslation();
+
   return (
     <View style={styles.screen}>
       <Appbar.Header style={styles.header}>
-        <Appbar.Content title="GoNext - дневник туриста" />
+        <Appbar.Content title={t('app.titleTagline')} />
       </Appbar.Header>
       <View style={styles.center}>
         <Button mode="contained" onPress={() => router.push('/places')} style={styles.btn}>
-          Места
+          {t('home.places')}
         </Button>
         <Button mode="contained" onPress={() => router.push('/trips')} style={styles.btn}>
-          Поездки
+          {t('home.trips')}
         </Button>
         <Button mode="contained" onPress={() => router.push('/next')} style={styles.btn}>
-          Следующее место
+          {t('home.nextPlace')}
         </Button>
         <Button mode="contained" onPress={() => router.push('/settings')} style={styles.btn}>
-          Настройки
+          {t('home.settings')}
         </Button>
       </View>
     </View>

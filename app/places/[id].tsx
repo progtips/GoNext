@@ -3,6 +3,7 @@ import { Alert, Image, ScrollView, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import { Appbar, Button, Surface, Text } from 'react-native-paper';
+import { useTranslation } from 'react-i18next';
 
 import { addPlacePhoto, deletePlace, deletePlacePhoto, getPlaceById, getPlacePhotos } from '../../src/db';
 import type { Place, PlacePhoto } from '../../src/db/types';
@@ -10,6 +11,7 @@ import { openInMaps } from '../../src/services/linking';
 import { deletePhotoAsync, savePhotoAsync } from '../../src/services/photos';
 
 export default function PlaceDetailsScreen() {
+  const { t } = useTranslation();
   const { id } = useLocalSearchParams<{ id: string }>();
   const [place, setPlace] = useState<Place | null>(null);
   const [photos, setPhotos] = useState<PlacePhoto[]>([]);
@@ -58,10 +60,10 @@ export default function PlaceDetailsScreen() {
     if (Number.isNaN(placeId)) {
       return;
     }
-    Alert.alert('Удалить место?', 'Все фотографии будут удалены.', [
-      { text: 'Отмена', style: 'cancel' },
+    Alert.alert(t('places.deletePlaceTitle'), t('places.deletePlaceBody'), [
+      { text: t('common.cancel'), style: 'cancel' },
       {
-        text: 'Удалить',
+        text: t('common.delete'),
         style: 'destructive',
         onPress: async () => {
           await deletePlace(placeId);
@@ -72,10 +74,10 @@ export default function PlaceDetailsScreen() {
   };
 
   const handleDeletePhoto = (photo: PlacePhoto) => {
-    Alert.alert('Удалить фото?', '', [
-      { text: 'Отмена', style: 'cancel' },
+    Alert.alert(t('places.deletePhotoTitle'), '', [
+      { text: t('common.cancel'), style: 'cancel' },
       {
-        text: 'Удалить',
+        text: t('common.delete'),
         style: 'destructive',
         onPress: async () => {
           await deletePlacePhoto(photo.id);
@@ -90,7 +92,7 @@ export default function PlaceDetailsScreen() {
     <Surface style={{ flex: 1, backgroundColor: 'transparent' }}>
       <Appbar.Header style={{ backgroundColor: 'transparent' }}>
         <Appbar.BackAction onPress={() => router.back()} />
-        <Appbar.Content title={place?.name ?? 'Место'} />
+        <Appbar.Content title={place?.name ?? t('places.title')} />
         {place ? (
           <>
             <Appbar.Action icon="pencil" onPress={() => router.push(`/places/${placeId}/edit`)} />
@@ -107,27 +109,31 @@ export default function PlaceDetailsScreen() {
         {place ? (
           <>
             <Text variant="titleMedium">{place.name}</Text>
-            <Text>{place.description ?? 'Без описания'}</Text>
+            <Text>{place.description ?? t('common.noDescription')}</Text>
             <Text>DD: {place.dd ?? '—'}</Text>
-            <Text>В планах: {place.visitLater ? 'да' : 'нет'}</Text>
-            <Text>Понравилось: {place.liked ? 'да' : 'нет'}</Text>
+            <Text>
+              {t('places.visitLaterLabel')}: {place.visitLater ? t('common.yes') : t('common.no')}
+            </Text>
+            <Text>
+              {t('places.likedLabel')}: {place.liked ? t('common.yes') : t('common.no')}
+            </Text>
             {place.dd ? (
               <Button mode="contained" onPress={() => openInMaps(place.dd, place.name)}>
-                Открыть на карте
+                {t('common.openMap')}
               </Button>
             ) : null}
           </>
         ) : (
-          <Text>Место не найдено.</Text>
+          <Text>{t('places.detailsNotFound')}</Text>
         )}
 
         <Surface elevation={0} style={{ gap: 12, backgroundColor: 'transparent' }}>
-          <Text variant="labelMedium">Фотографии</Text>
+          <Text variant="labelMedium">{t('places.photos')}</Text>
           <Button mode="outlined" onPress={handleAddPhoto}>
-            Добавить фото
+            {t('common.addPhoto')}
           </Button>
           {photos.length === 0 ? (
-            <Text>Фотографий пока нет.</Text>
+            <Text>{t('places.noPhotos')}</Text>
           ) : (
             photos.map((photo) => (
               <Surface key={photo.id} elevation={0} style={{ gap: 8 }}>
@@ -137,7 +143,7 @@ export default function PlaceDetailsScreen() {
                   resizeMode="cover"
                 />
                 <Button mode="outlined" onPress={() => handleDeletePhoto(photo)}>
-                  Удалить фото
+                  {t('common.deletePhoto')}
                 </Button>
               </Surface>
             ))

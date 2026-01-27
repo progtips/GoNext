@@ -1,25 +1,28 @@
 import { Pressable, ScrollView, View } from 'react-native';
 import { router } from 'expo-router';
-import { Appbar, Surface, Switch, Text } from 'react-native-paper';
+import { Appbar, Button, Surface, Switch, Text } from 'react-native-paper';
+import { useTranslation } from 'react-i18next';
 
 import { useThemeController } from '../../src/theme/ThemeContext';
+import { setLanguage } from '../../src/i18n';
 
 export default function SettingsScreen() {
+  const { t, i18n } = useTranslation();
   const { isDark, setIsDark, primaryColor, setPrimaryColor } = useThemeController();
 
   return (
     <Surface style={{ flex: 1, backgroundColor: 'transparent' }}>
       <Appbar.Header style={{ backgroundColor: 'transparent' }}>
         <Appbar.BackAction onPress={() => router.back()} />
-        <Appbar.Content title="Настройки" />
+        <Appbar.Content title={t('settings.title')} />
       </Appbar.Header>
 
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 16, gap: 12 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-          <Text>Темная тема</Text>
+          <Text>{t('settings.darkTheme')}</Text>
           <Switch value={isDark} onValueChange={setIsDark} />
         </View>
-        <Text variant="labelMedium">Основной цвет</Text>
+        <Text variant="labelMedium">{t('settings.primaryColor')}</Text>
         <View
           style={{
             flexDirection: 'row',
@@ -44,7 +47,7 @@ export default function SettingsScreen() {
               key={color}
               onPress={() => setPrimaryColor(color)}
               accessibilityRole="button"
-              accessibilityLabel={`Выбрать цвет ${color}`}
+              accessibilityLabel={t('settings.selectColor', { color })}
               hitSlop={8}
               style={{
                 width: 56,
@@ -56,6 +59,21 @@ export default function SettingsScreen() {
               }}
             />
           ))}
+        </View>
+        <Text variant="labelMedium">{t('settings.language')}</Text>
+        <View style={{ flexDirection: 'row', gap: 12 }}>
+          <Button
+            mode={i18n.language === 'ru' ? 'contained' : 'outlined'}
+            onPress={() => setLanguage('ru')}
+          >
+            {t('settings.languageRu')}
+          </Button>
+          <Button
+            mode={i18n.language === 'en' ? 'contained' : 'outlined'}
+            onPress={() => setLanguage('en')}
+          >
+            {t('settings.languageEn')}
+          </Button>
         </View>
       </ScrollView>
     </Surface>

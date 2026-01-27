@@ -1,0 +1,94 @@
+{
+  "app": {
+    "title": "GoNext",
+    "titleTagline": "GoNext — travel diary"
+  },
+  "common": {
+    "yes": "yes",
+    "no": "no",
+    "save": "Save",
+    "saveChanges": "Save changes",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "deletePhoto": "Delete photo",
+    "addPhoto": "Add photo",
+    "openMap": "Open on map",
+    "openNavigator": "Open in navigator",
+    "markVisited": "Mark as visited",
+    "noDescription": "No description"
+  },
+  "home": {
+    "places": "Places",
+    "trips": "Trips",
+    "nextPlace": "Next place",
+    "settings": "Settings"
+  },
+  "places": {
+    "title": "Places",
+    "newTitle": "New place",
+    "editTitle": "Edit place",
+    "filters": {
+      "visitLater": "Want to visit",
+      "liked": "Liked"
+    },
+    "empty": "No matching places yet.",
+    "addPlace": "Add place",
+    "nameLabel": "Name",
+    "descriptionLabel": "Description",
+    "ddLabel": "DD (Decimal Degrees)",
+    "fillCurrent": "Fill with current coordinates",
+    "detailsNotFound": "Place not found.",
+    "visitLaterLabel": "In plans",
+    "likedLabel": "Liked",
+    "photos": "Photos",
+    "noPhotos": "No photos yet.",
+    "deletePlaceTitle": "Delete place?",
+    "deletePlaceBody": "All photos will be deleted.",
+    "deletePhotoTitle": "Delete photo?"
+  },
+  "trips": {
+    "title": "Trips",
+    "empty": "No trips yet. Create your first.",
+    "createTrip": "Create trip",
+    "setCurrent": "Set current:",
+    "newTitle": "New trip",
+    "editTitle": "Edit trip",
+    "titleLabel": "Title",
+    "startDate": "Start date",
+    "endDate": "End date",
+    "makeCurrent": "Make current",
+    "detailsNotFound": "Trip not found.",
+    "dates": "Dates: {{start}} — {{end}}",
+    "route": "Route",
+    "routeEmpty": "Route is empty.",
+    "addPlace": "Add place",
+    "noPlacesAvailable": "No available places. Create a place first.",
+    "visitedAt": "Visited: {{date}}",
+    "hasNotes": "Has notes",
+    "notVisited": "Not visited",
+    "deleteTripTitle": "Delete trip?",
+    "deleteTripBody": "Route and photos will be deleted.",
+    "deleteTripPlaceTitle": "Remove place from route?"
+  },
+  "tripPlace": {
+    "title": "Trip place",
+    "visitedLabel": "Visited",
+    "visitDateLabel": "Date",
+    "notes": "Notes",
+    "notesPlaceholder": "Add notes about this place",
+    "saveNotes": "Save notes"
+  },
+  "next": {
+    "title": "Next place",
+    "empty": "No next place. Check current trip."
+  },
+  "settings": {
+    "title": "Settings",
+    "darkTheme": "Dark theme",
+    "primaryColor": "Primary color",
+    "language": "Language",
+    "languageRu": "Russian",
+    "languageEn": "English",
+    "selectColor": "Select color {{color}}"
+  }
+}

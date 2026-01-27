@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Alert, ScrollView, View } from 'react-native';
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { Appbar, Button, IconButton, List, Surface, Text } from 'react-native-paper';
+import { useTranslation } from 'react-i18next';
 
 import {
   deleteTrip,
@@ -14,6 +15,7 @@ import {
 import type { Trip } from '../../src/db/types';
 
 export default function TripDetailsScreen() {
+  const { t } = useTranslation();
   const { id } = useLocalSearchParams<{ id: string }>();
   const tripId = Number(id);
   const [trip, setTrip] = useState<Trip | null>(null);
@@ -66,10 +68,10 @@ export default function TripDetailsScreen() {
   };
 
   const handleDeleteTripPlace = (tripPlaceId: number) => {
-    Alert.alert('Удалить место из маршрута?', '', [
-      { text: 'Отмена', style: 'cancel' },
+    Alert.alert(t('trips.deleteTripPlaceTitle'), '', [
+      { text: t('common.cancel'), style: 'cancel' },
       {
-        text: 'Удалить',
+        text: t('common.delete'),
         style: 'destructive',
         onPress: async () => {
           await deleteTripPlace(tripPlaceId);
@@ -83,7 +85,7 @@ export default function TripDetailsScreen() {
     <Surface style={{ flex: 1, backgroundColor: 'transparent' }}>
       <Appbar.Header style={{ backgroundColor: 'transparent' }}>
         <Appbar.BackAction onPress={() => router.back()} />
-        <Appbar.Content title={trip?.title ?? 'Поездка'} />
+        <Appbar.Content title={trip?.title ?? t('trips.title')} />
         <Appbar.Action
           icon="plus"
           onPress={() => router.push(`/trips/${tripId}/add-place`)}
@@ -98,10 +100,10 @@ export default function TripDetailsScreen() {
             if (Number.isNaN(tripId)) {
               return;
             }
-            Alert.alert('Удалить поездку?', 'Маршрут и фото будут удалены.', [
-              { text: 'Отмена', style: 'cancel' },
+            Alert.alert(t('trips.deleteTripTitle'), t('trips.deleteTripBody'), [
+              { text: t('common.cancel'), style: 'cancel' },
               {
-                text: 'Удалить',
+                text: t('common.delete'),
                 style: 'destructive',
                 onPress: async () => {
                   await deleteTrip(tripId);
@@ -117,22 +119,20 @@ export default function TripDetailsScreen() {
         {trip ? (
           <>
             <Text variant="titleMedium">{trip.title}</Text>
-            <Text>{trip.description ?? 'Без описания'}</Text>
-            <Text>
-              Даты: {trip.startDate ?? '—'} — {trip.endDate ?? '—'}
-            </Text>
+            <Text>{trip.description ?? t('common.noDescription')}</Text>
+            <Text>{t('trips.dates', { start: trip.startDate ?? '—', end: trip.endDate ?? '—' })}</Text>
           </>
         ) : (
-          <Text>Поездка не найдена.</Text>
+          <Text>{t('trips.detailsNotFound')}</Text>
         )}
 
         <Surface elevation={0} style={{ gap: 12, backgroundColor: 'transparent' }}>
-          <Text variant="labelMedium">Маршрут</Text>
+          <Text variant="labelMedium">{t('trips.route')}</Text>
           {tripPlaces.length === 0 ? (
             <Surface elevation={0} style={{ gap: 8 }}>
-              <Text>Маршрут пока пуст.</Text>
+              <Text>{t('trips.routeEmpty')}</Text>
               <Button mode="contained" onPress={() => router.push(`/trips/${tripId}/add-place`)}>
-                Добавить место
+                {t('trips.addPlace')}
               </Button>
             </Surface>
           ) : (
@@ -143,10 +143,10 @@ export default function TripDetailsScreen() {
                   title={`${tp.orderIndex}. ${tp.placeName}`}
                   description={
                     tp.visited
-                      ? `Посещено: ${tp.visitDate ?? ''}`
+                      ? t('trips.visitedAt', { date: tp.visitDate ?? '' })
                       : tp.notes
-                      ? 'Есть заметки'
-                      : 'Не посещено'
+                      ? t('trips.hasNotes')
+                      : t('trips.notVisited')
                   }
                   onPress={() => router.push(`/trips/${tripId}/places/${tp.id}`)}
                   left={(props) => <List.Icon {...props} icon={tp.visited ? 'check' : 'map-marker'} />}

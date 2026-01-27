@@ -1,6 +1,7 @@
 import { ScrollView } from 'react-native';
 import { router } from 'expo-router';
 import { Appbar, Button, Surface, Text } from 'react-native-paper';
+import { useTranslation } from 'react-i18next';
 
 import { getNextTripPlace, markTripPlaceVisited } from '../../src/db';
 import { openInMaps, openInNavigator } from '../../src/services/linking';
@@ -8,6 +9,7 @@ import { useFocusEffect } from 'expo-router';
 import { useCallback, useState } from 'react';
 
 export default function NextPlaceScreen() {
+  const { t } = useTranslation();
   const [nextPlace, setNextPlace] = useState<null | {
     id: number;
     placeName: string;
@@ -39,14 +41,14 @@ export default function NextPlaceScreen() {
     <Surface style={{ flex: 1, backgroundColor: 'transparent' }}>
       <Appbar.Header style={{ backgroundColor: 'transparent' }}>
         <Appbar.BackAction onPress={() => router.back()} />
-        <Appbar.Content title="Следующее место" />
+        <Appbar.Content title={t('next.title')} />
       </Appbar.Header>
 
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 16, gap: 12 }}>
         {nextPlace ? (
           <>
             <Text variant="titleMedium">{nextPlace.placeName}</Text>
-            <Text>{nextPlace.placeDescription ?? 'Без описания'}</Text>
+            <Text>{nextPlace.placeDescription ?? t('common.noDescription')}</Text>
             <Text>DD: {nextPlace.dd ?? '—'}</Text>
             {nextPlace.dd ? (
               <>
@@ -54,21 +56,21 @@ export default function NextPlaceScreen() {
                   mode="contained"
                   onPress={() => openInMaps(nextPlace.dd!, nextPlace.placeName)}
                 >
-                  Открыть на карте
+                  {t('common.openMap')}
                 </Button>
                 <Button mode="outlined" onPress={() => openInNavigator(nextPlace.dd!)}>
-                  Открыть в навигаторе
+                  {t('common.openNavigator')}
                 </Button>
               </>
             ) : null}
             {!nextPlace.visited ? (
               <Button mode="outlined" onPress={handleVisited}>
-                Отметить посещенным
+                {t('common.markVisited')}
               </Button>
             ) : null}
           </>
         ) : (
-          <Text>Нет следующего места. Проверьте текущую поездку.</Text>
+          <Text>{t('next.empty')}</Text>
         )}
       </ScrollView>
     </Surface>

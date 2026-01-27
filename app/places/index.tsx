@@ -2,11 +2,13 @@ import { useCallback, useMemo, useState } from 'react';
 import { ScrollView } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
 import { Appbar, Button, List, Surface, Switch, Text } from 'react-native-paper';
+import { useTranslation } from 'react-i18next';
 
 import { getPlaces } from '../../src/db';
 import type { Place } from '../../src/db/types';
 
 export default function PlacesScreen() {
+  const { t } = useTranslation();
   const [places, setPlaces] = useState<Place[]>([]);
   const [filterVisitLater, setFilterVisitLater] = useState(false);
   const [filterLiked, setFilterLiked] = useState(false);
@@ -37,7 +39,7 @@ export default function PlacesScreen() {
     <Surface style={{ flex: 1, backgroundColor: 'transparent' }}>
       <Appbar.Header style={{ backgroundColor: 'transparent' }}>
         <Appbar.BackAction onPress={() => router.back()} />
-        <Appbar.Content title="Места" />
+        <Appbar.Content title={t('places.title')} />
         <Appbar.Action icon="plus" onPress={() => router.push('/places/new')} />
       </Appbar.Header>
 
@@ -45,19 +47,19 @@ export default function PlacesScreen() {
         <Surface elevation={0} style={{ gap: 8 }}>
           <Surface elevation={0} style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
             <Switch value={filterVisitLater} onValueChange={setFilterVisitLater} />
-            <Text>Хочу посетить</Text>
+            <Text>{t('places.filters.visitLater')}</Text>
           </Surface>
           <Surface elevation={0} style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
             <Switch value={filterLiked} onValueChange={setFilterLiked} />
-            <Text>Понравилось</Text>
+            <Text>{t('places.filters.liked')}</Text>
           </Surface>
         </Surface>
 
         {filteredPlaces.length === 0 ? (
           <Surface elevation={0} style={{ gap: 12 }}>
-            <Text>Пока нет подходящих мест.</Text>
+            <Text>{t('places.empty')}</Text>
             <Button mode="contained" onPress={() => router.push('/places/new')}>
-              Добавить место
+              {t('places.addPlace')}
             </Button>
           </Surface>
         ) : (
@@ -66,7 +68,7 @@ export default function PlacesScreen() {
               <List.Item
                 key={place.id}
                 title={place.name}
-                description={place.description ?? 'Без описания'}
+                description={place.description ?? t('common.noDescription')}
                 onPress={() => router.push(`/places/${place.id}`)}
                 left={(props) => <List.Icon {...props} icon="map-marker" />}
               />

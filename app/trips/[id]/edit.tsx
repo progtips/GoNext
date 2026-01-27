@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Appbar, Button, Surface, Switch, Text, TextInput } from 'react-native-paper';
+import { useTranslation } from 'react-i18next';
 
 import { getTripById, updateTrip } from '../../../src/db';
 
 export default function EditTripScreen() {
+  const { t } = useTranslation();
   const { id } = useLocalSearchParams<{ id: string }>();
   const tripId = Number(id);
 
@@ -51,25 +53,25 @@ export default function EditTripScreen() {
     <Surface style={{ flex: 1, backgroundColor: 'transparent' }}>
       <Appbar.Header style={{ backgroundColor: 'transparent' }}>
         <Appbar.BackAction onPress={() => router.back()} />
-        <Appbar.Content title="Редактировать поездку" />
+        <Appbar.Content title={t('trips.editTitle')} />
       </Appbar.Header>
 
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 16, gap: 12 }}>
-        <TextInput label="Название" value={title} onChangeText={setTitle} />
+        <TextInput label={t('trips.titleLabel')} value={title} onChangeText={setTitle} />
         <TextInput
-          label="Описание"
+          label={t('places.descriptionLabel')}
           value={description}
           onChangeText={setDescription}
           multiline
         />
-        <TextInput label="Дата начала" value={startDate} onChangeText={setStartDate} />
-        <TextInput label="Дата окончания" value={endDate} onChangeText={setEndDate} />
+        <TextInput label={t('trips.startDate')} value={startDate} onChangeText={setStartDate} />
+        <TextInput label={t('trips.endDate')} value={endDate} onChangeText={setEndDate} />
         <Surface elevation={0} style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-          <Text>Сделать текущей</Text>
+          <Text>{t('trips.makeCurrent')}</Text>
           <Switch value={current} onValueChange={setCurrent} />
         </Surface>
         <Button mode="contained" onPress={handleSave}>
-          Сохранить изменения
+          {t('common.saveChanges')}
         </Button>
       </ScrollView>
     </Surface>

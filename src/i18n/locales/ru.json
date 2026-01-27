@@ -1,0 +1,94 @@
+{
+  "app": {
+    "title": "GoNext",
+    "titleTagline": "GoNext — дневник туриста"
+  },
+  "common": {
+    "yes": "да",
+    "no": "нет",
+    "save": "Сохранить",
+    "saveChanges": "Сохранить изменения",
+    "cancel": "Отмена",
+    "delete": "Удалить",
+    "deletePhoto": "Удалить фото",
+    "addPhoto": "Добавить фото",
+    "openMap": "Открыть на карте",
+    "openNavigator": "Открыть в навигаторе",
+    "markVisited": "Отметить посещенным",
+    "noDescription": "Без описания"
+  },
+  "home": {
+    "places": "Места",
+    "trips": "Поездки",
+    "nextPlace": "Следующее место",
+    "settings": "Настройки"
+  },
+  "places": {
+    "title": "Места",
+    "newTitle": "Новое место",
+    "editTitle": "Редактировать место",
+    "filters": {
+      "visitLater": "Хочу посетить",
+      "liked": "Понравилось"
+    },
+    "empty": "Пока нет подходящих мест.",
+    "addPlace": "Добавить место",
+    "nameLabel": "Название",
+    "descriptionLabel": "Описание",
+    "ddLabel": "DD (Decimal Degrees)",
+    "fillCurrent": "Заполнить текущими координатами",
+    "detailsNotFound": "Место не найдено.",
+    "visitLaterLabel": "В планах",
+    "likedLabel": "Понравилось",
+    "photos": "Фотографии",
+    "noPhotos": "Фотографий пока нет.",
+    "deletePlaceTitle": "Удалить место?",
+    "deletePlaceBody": "Все фотографии будут удалены.",
+    "deletePhotoTitle": "Удалить фото?"
+  },
+  "trips": {
+    "title": "Поездки",
+    "empty": "Пока нет поездок. Создайте первую.",
+    "createTrip": "Создать поездку",
+    "setCurrent": "Сделать текущей:",
+    "newTitle": "Новая поездка",
+    "editTitle": "Редактировать поездку",
+    "titleLabel": "Название",
+    "startDate": "Дата начала",
+    "endDate": "Дата окончания",
+    "makeCurrent": "Сделать текущей",
+    "detailsNotFound": "Поездка не найдена.",
+    "dates": "Даты: {{start}} — {{end}}",
+    "route": "Маршрут",
+    "routeEmpty": "Маршрут пока пуст.",
+    "addPlace": "Добавить место",
+    "noPlacesAvailable": "Нет доступных мест. Сначала создайте место.",
+    "visitedAt": "Посещено: {{date}}",
+    "hasNotes": "Есть заметки",
+    "notVisited": "Не посещено",
+    "deleteTripTitle": "Удалить поездку?",
+    "deleteTripBody": "Маршрут и фото будут удалены.",
+    "deleteTripPlaceTitle": "Удалить место из маршрута?"
+  },
+  "tripPlace": {
+    "title": "Место в поездке",
+    "visitedLabel": "Посещено",
+    "visitDateLabel": "Дата",
+    "notes": "Заметки",
+    "notesPlaceholder": "Добавьте заметки о месте",
+    "saveNotes": "Сохранить заметки"
+  },
+  "next": {
+    "title": "Следующее место",
+    "empty": "Нет следующего места. Проверьте текущую поездку."
+  },
+  "settings": {
+    "title": "Настройки",
+    "darkTheme": "Темная тема",
+    "primaryColor": "Основной цвет",
+    "language": "Язык",
+    "languageRu": "Русский",
+    "languageEn": "English",
+    "selectColor": "Выбрать цвет {{color}}"
+  }
+}

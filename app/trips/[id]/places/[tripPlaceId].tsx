@@ -3,6 +3,7 @@ import { Alert, Image, ScrollView } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import { Appbar, Button, Surface, Text, TextInput } from 'react-native-paper';
+import { useTranslation } from 'react-i18next';
 
 import {
   addTripPlacePhoto,
@@ -17,6 +18,7 @@ import { openInMaps } from '../../../../src/services/linking';
 import { deletePhotoAsync, savePhotoAsync } from '../../../../src/services/photos';
 
 export default function TripPlaceDetailsScreen() {
+  const { t } = useTranslation();
   const { tripPlaceId } = useLocalSearchParams<{ tripPlaceId: string }>();
   const [details, setDetails] = useState<null | {
     id: number;
@@ -93,10 +95,10 @@ export default function TripPlaceDetailsScreen() {
   };
 
   const handleDeletePhoto = (photo: TripPlacePhoto) => {
-    Alert.alert('Удалить фото?', '', [
-      { text: 'Отмена', style: 'cancel' },
+    Alert.alert(t('places.deletePhotoTitle'), '', [
+      { text: t('common.cancel'), style: 'cancel' },
       {
-        text: 'Удалить',
+        text: t('common.delete'),
         style: 'destructive',
         onPress: async () => {
           await deleteTripPlacePhoto(photo.id);
@@ -111,52 +113,58 @@ export default function TripPlaceDetailsScreen() {
     <Surface style={{ flex: 1, backgroundColor: 'transparent' }}>
       <Appbar.Header style={{ backgroundColor: 'transparent' }}>
         <Appbar.BackAction onPress={() => router.back()} />
-        <Appbar.Content title={details?.placeName ?? 'Место в поездке'} />
+        <Appbar.Content title={details?.placeName ?? t('tripPlace.title')} />
       </Appbar.Header>
 
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 16, gap: 12 }}>
         {details ? (
           <>
             <Text variant="titleMedium">{details.placeName}</Text>
-            <Text>{details.placeDescription ?? 'Без описания'}</Text>
+            <Text>{details.placeDescription ?? t('common.noDescription')}</Text>
             <Text>DD: {details.dd ?? '—'}</Text>
-            <Text>Посещено: {details.visited ? 'да' : 'нет'}</Text>
-            {details.visitDate ? <Text>Дата: {details.visitDate}</Text> : null}
+            <Text>
+              {t('tripPlace.visitedLabel')}: {details.visited ? t('common.yes') : t('common.no')}
+            </Text>
+            {details.visitDate ? (
+              <Text>
+                {t('tripPlace.visitDateLabel')}: {details.visitDate}
+              </Text>
+            ) : null}
             {details.dd ? (
               <Button mode="contained" onPress={() => openInMaps(details.dd!, details.placeName)}>
-                Открыть на карте
+                {t('common.openMap')}
               </Button>
             ) : null}
             {!details.visited ? (
               <Button mode="outlined" onPress={handleMarkVisited}>
-                Отметить посещенным
+                {t('common.markVisited')}
               </Button>
             ) : null}
           </>
         ) : (
-          <Text>Место не найдено.</Text>
+          <Text>{t('places.detailsNotFound')}</Text>
         )}
 
         <Surface elevation={0} style={{ gap: 12, backgroundColor: 'transparent' }}>
-          <Text variant="labelMedium">Заметки</Text>
+          <Text variant="labelMedium">{t('tripPlace.notes')}</Text>
           <TextInput
             value={notes}
             onChangeText={setNotes}
             multiline
-            placeholder="Добавьте заметки о месте"
+            placeholder={t('tripPlace.notesPlaceholder')}
           />
           <Button mode="contained" onPress={handleSaveNotes}>
-            Сохранить заметки
+            {t('tripPlace.saveNotes')}
           </Button>
         </Surface>
 
         <Surface elevation={0} style={{ gap: 12, backgroundColor: 'transparent' }}>
-          <Text variant="labelMedium">Фотографии</Text>
+          <Text variant="labelMedium">{t('places.photos')}</Text>
           <Button mode="outlined" onPress={handleAddPhoto}>
-            Добавить фото
+            {t('common.addPhoto')}
           </Button>
           {photos.length === 0 ? (
-            <Text>Фотографий пока нет.</Text>
+            <Text>{t('places.noPhotos')}</Text>
           ) : (
             photos.map((photo) => (
               <Surface key={photo.id} elevation={0} style={{ gap: 8 }}>
@@ -166,7 +174,7 @@ export default function TripPlaceDetailsScreen() {
                   resizeMode="cover"
                 />
                 <Button mode="outlined" onPress={() => handleDeletePhoto(photo)}>
-                  Удалить фото
+                  {t('common.deletePhoto')}
                 </Button>
               </Surface>
             ))

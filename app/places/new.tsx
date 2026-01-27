@@ -2,11 +2,13 @@ import { useState } from 'react';
 import { ScrollView } from 'react-native';
 import { router } from 'expo-router';
 import { Appbar, Button, Surface, Switch, Text, TextInput } from 'react-native-paper';
+import { useTranslation } from 'react-i18next';
 
 import { addPlace } from '../../src/db';
 import { getCurrentDd } from '../../src/services/location';
 
 export default function NewPlaceScreen() {
+  const { t } = useTranslation();
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [visitLater, setVisitLater] = useState(true);
@@ -42,34 +44,34 @@ export default function NewPlaceScreen() {
     <Surface style={{ flex: 1, backgroundColor: 'transparent' }}>
       <Appbar.Header style={{ backgroundColor: 'transparent' }}>
         <Appbar.BackAction onPress={() => router.back()} />
-        <Appbar.Content title="Новое место" />
+        <Appbar.Content title={t('places.newTitle')} />
       </Appbar.Header>
 
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 16, gap: 12 }}>
-        <TextInput label="Название" value={name} onChangeText={setName} />
+        <TextInput label={t('places.nameLabel')} value={name} onChangeText={setName} />
         <TextInput
-          label="Описание"
+          label={t('places.descriptionLabel')}
           value={description}
           onChangeText={setDescription}
           multiline
         />
 
         <Surface elevation={0} style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-          <Text>Хочу посетить</Text>
+          <Text>{t('places.filters.visitLater')}</Text>
           <Switch value={visitLater} onValueChange={setVisitLater} />
         </Surface>
         <Surface elevation={0} style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-          <Text>Понравилось</Text>
+          <Text>{t('places.filters.liked')}</Text>
           <Switch value={liked} onValueChange={setLiked} />
         </Surface>
 
-        <TextInput label="DD (Decimal Degrees)" value={dd} onChangeText={setDd} />
+        <TextInput label={t('places.ddLabel')} value={dd} onChangeText={setDd} />
         <Button mode="outlined" onPress={handleFillLocation} loading={loadingLocation}>
-          Заполнить текущими координатами
+          {t('places.fillCurrent')}
         </Button>
 
         <Button mode="contained" onPress={handleSave}>
-          Сохранить
+          {t('common.save')}
         </Button>
       </ScrollView>
     </Surface>

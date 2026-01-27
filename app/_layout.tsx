@@ -8,15 +8,23 @@ import { PaperProvider, MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { initDatabase } from '../src/db';
+import { initI18n } from '../src/i18n';
 import ThemeContext from '../src/theme/ThemeContext';
 
 export default function RootLayout() {
   const [isDark, setIsDark] = useState(false);
   const [themeReady, setThemeReady] = useState(false);
+  const [i18nReady, setI18nReady] = useState(false);
   const [primaryColor, setPrimaryColor] = useState('#6750A4');
 
   useEffect(() => {
     initDatabase().catch(() => undefined);
+  }, []);
+
+  useEffect(() => {
+    initI18n()
+      .catch(() => undefined)
+      .finally(() => setI18nReady(true));
   }, []);
 
   useEffect(() => {
@@ -81,7 +89,7 @@ export default function RootLayout() {
     }
   }, []);
 
-  if (!themeReady) {
+  if (!themeReady || !i18nReady) {
     return null;
   }
 
