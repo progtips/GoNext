@@ -7,3 +7,8 @@ export const openInMaps = (dd: string, label?: string) => {
   )}(${encodedLabel})`;
   return Linking.openURL(url);
 };
+
+export const openInNavigator = (dd: string) => {
+  const url = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(dd)}`;
+  return Linking.openURL(url);
+};
