@@ -4,6 +4,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { Appbar, Button, Surface, Switch, Text, TextInput } from 'react-native-paper';
 
 import { getPlaceById, updatePlace } from '../../../src/db';
+import { getCurrentDd } from '../../../src/services/location';
 
 export default function EditPlaceScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -14,6 +15,7 @@ export default function EditPlaceScreen() {
   const [visitLater, setVisitLater] = useState(false);
   const [liked, setLiked] = useState(false);
   const [dd, setDd] = useState('');
+  const [loadingLocation, setLoadingLocation] = useState(false);
 
   useEffect(() => {
     if (Number.isNaN(placeId)) {
@@ -47,6 +49,15 @@ export default function EditPlaceScreen() {
     router.back();
   };
 
+  const handleFillLocation = async () => {
+    setLoadingLocation(true);
+    const value = await getCurrentDd();
+    if (value) {
+      setDd(value);
+    }
+    setLoadingLocation(false);
+  };
+
   return (
     <Surface style={{ flex: 1, backgroundColor: 'transparent' }}>
       <Appbar.Header style={{ backgroundColor: 'transparent' }}>
@@ -73,6 +84,9 @@ export default function EditPlaceScreen() {
         </Surface>
 
         <TextInput label="DD (Decimal Degrees)" value={dd} onChangeText={setDd} />
+        <Button mode="outlined" onPress={handleFillLocation} loading={loadingLocation}>
+          Заполнить текущими координатами
+        </Button>
 
         <Button mode="contained" onPress={handleSave}>
           Сохранить изменения

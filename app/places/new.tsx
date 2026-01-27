@@ -4,6 +4,7 @@ import { router } from 'expo-router';
 import { Appbar, Button, Surface, Switch, Text, TextInput } from 'react-native-paper';
 
 import { addPlace } from '../../src/db';
+import { getCurrentDd } from '../../src/services/location';
 
 export default function NewPlaceScreen() {
   const [name, setName] = useState('');
@@ -11,6 +12,7 @@ export default function NewPlaceScreen() {
   const [visitLater, setVisitLater] = useState(true);
   const [liked, setLiked] = useState(false);
   const [dd, setDd] = useState('');
+  const [loadingLocation, setLoadingLocation] = useState(false);
 
   const handleSave = async () => {
     if (!name.trim()) {
@@ -25,6 +27,15 @@ export default function NewPlaceScreen() {
       dd: dd.trim() || null,
     });
     router.back();
+  };
+
+  const handleFillLocation = async () => {
+    setLoadingLocation(true);
+    const value = await getCurrentDd();
+    if (value) {
+      setDd(value);
+    }
+    setLoadingLocation(false);
   };
 
   return (
@@ -53,6 +64,9 @@ export default function NewPlaceScreen() {
         </Surface>
 
         <TextInput label="DD (Decimal Degrees)" value={dd} onChangeText={setDd} />
+        <Button mode="outlined" onPress={handleFillLocation} loading={loadingLocation}>
+          Заполнить текущими координатами
+        </Button>
 
         <Button mode="contained" onPress={handleSave}>
           Сохранить

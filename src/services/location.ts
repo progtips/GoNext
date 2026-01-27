@@ -17,3 +17,11 @@ export const getCurrentPosition = async () => {
     longitude: position.coords.longitude,
   };
 };
+
+export const getCurrentDd = async () => {
+  const position = await getCurrentPosition();
+  if (!position) {
+    return null;
+  }
+  return `${position.latitude}, ${position.longitude}`;
+};
