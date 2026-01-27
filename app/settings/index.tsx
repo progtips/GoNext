@@ -1,6 +1,6 @@
-import { ScrollView, View } from 'react-native';
+import { Pressable, ScrollView, View } from 'react-native';
 import { router } from 'expo-router';
-import { Appbar, Button, Surface, Switch, Text } from 'react-native-paper';
+import { Appbar, Surface, Switch, Text } from 'react-native-paper';
 
 import { useThemeController } from '../../src/theme/ThemeContext';
 
@@ -20,7 +20,14 @@ export default function SettingsScreen() {
           <Switch value={isDark} onValueChange={setIsDark} />
         </View>
         <Text variant="labelMedium">Основной цвет</Text>
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            gap: 12,
+            justifyContent: 'center',
+          }}
+        >
           {[
             '#6750A4',
             '#4F378B',
@@ -30,15 +37,24 @@ export default function SettingsScreen() {
             '#F4511E',
             '#E53935',
             '#3949AB',
+            '#8E24AA',
+            '#6D4C41',
           ].map((color) => (
-            <Button
+            <Pressable
               key={color}
-              mode={primaryColor === color ? 'contained' : 'outlined'}
               onPress={() => setPrimaryColor(color)}
-              style={{ marginRight: 8 }}
-            >
-              {color}
-            </Button>
+              accessibilityRole="button"
+              accessibilityLabel={`Выбрать цвет ${color}`}
+              hitSlop={8}
+              style={{
+                width: 56,
+                height: 56,
+                borderRadius: 28,
+                backgroundColor: color,
+                borderWidth: primaryColor === color ? 3 : 1,
+                borderColor: primaryColor === color ? '#FFFFFF' : 'rgba(0, 0, 0, 0.2)',
+              }}
+            />
           ))}
         </View>
       </ScrollView>

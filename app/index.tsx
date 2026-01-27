@@ -6,7 +6,7 @@ export default function HomeScreen() {
   return (
     <View style={styles.screen}>
       <Appbar.Header style={styles.header}>
-        <Appbar.Content title="GoNext" />
+        <Appbar.Content title="GoNext - дневник туриста" />
       </Appbar.Header>
       <View style={styles.center}>
         <Button mode="contained" onPress={() => router.push('/places')} style={styles.btn}>

@@ -51,6 +51,13 @@ export default function RootLayout() {
       colors: {
         ...base.colors,
         primary: primaryColor,
+        onPrimary: '#FFFFFF',
+        primaryContainer: primaryColor,
+        onPrimaryContainer: '#FFFFFF',
+        secondary: primaryColor,
+        onSecondary: '#FFFFFF',
+        secondaryContainer: primaryColor,
+        onSecondaryContainer: '#FFFFFF',
         background: 'transparent',
         surface: 'transparent',
       },
@@ -91,19 +98,31 @@ export default function RootLayout() {
       <PaperProvider theme={theme}>
         <SafeAreaProvider style={styles.safeArea}>
           <View style={styles.container}>
-            <ImageBackground
-              source={require('../assets/backgrounds/gonext-bg.png')}
-              style={styles.background}
-              resizeMode="cover"
-            >
-              <Stack
-                screenOptions={{
-                  headerShown: false,
-                  animation: 'none',
-                  contentStyle: { backgroundColor: 'transparent' },
-                }}
-              />
-            </ImageBackground>
+            {isDark ? (
+              <View style={styles.darkBackground}>
+                <Stack
+                  screenOptions={{
+                    headerShown: false,
+                    animation: 'none',
+                    contentStyle: { backgroundColor: 'transparent' },
+                  }}
+                />
+              </View>
+            ) : (
+              <ImageBackground
+                source={require('../assets/backgrounds/gonext-bg.png')}
+                style={styles.background}
+                resizeMode="cover"
+              >
+                <Stack
+                  screenOptions={{
+                    headerShown: false,
+                    animation: 'none',
+                    contentStyle: { backgroundColor: 'transparent' },
+                  }}
+                />
+              </ImageBackground>
+            )}
           </View>
         </SafeAreaProvider>
       </PaperProvider>
@@ -120,5 +139,9 @@ const styles = StyleSheet.create({
   },
   background: {
     flex: 1,
+  },
+  darkBackground: {
+    flex: 1,
+    backgroundColor: '#121212',
   },
 });
