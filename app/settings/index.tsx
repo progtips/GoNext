@@ -1,11 +1,11 @@
 import { ScrollView, View } from 'react-native';
 import { router } from 'expo-router';
-import { Appbar, Surface, Switch, Text } from 'react-native-paper';
+import { Appbar, Button, Surface, Switch, Text } from 'react-native-paper';
 
 import { useThemeController } from '../../src/theme/ThemeContext';
 
 export default function SettingsScreen() {
-  const { isDark, setIsDark } = useThemeController();
+  const { isDark, setIsDark, primaryColor, setPrimaryColor } = useThemeController();
 
   return (
     <Surface style={{ flex: 1, backgroundColor: 'transparent' }}>
@@ -19,7 +19,28 @@ export default function SettingsScreen() {
           <Text>Темная тема</Text>
           <Switch value={isDark} onValueChange={setIsDark} />
         </View>
-        <Text>Настройки будут добавлены в следующих версиях.</Text>
+        <Text variant="labelMedium">Основной цвет</Text>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+          {[
+            '#6750A4',
+            '#4F378B',
+            '#1E88E5',
+            '#00897B',
+            '#43A047',
+            '#F4511E',
+            '#E53935',
+            '#3949AB',
+          ].map((color) => (
+            <Button
+              key={color}
+              mode={primaryColor === color ? 'contained' : 'outlined'}
+              onPress={() => setPrimaryColor(color)}
+              style={{ marginRight: 8 }}
+            >
+              {color}
+            </Button>
+          ))}
+        </View>
       </ScrollView>
     </Surface>
   );

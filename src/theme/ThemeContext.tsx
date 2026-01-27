@@ -4,6 +4,8 @@ type ThemeContextValue = {
   isDark: boolean;
   setIsDark: (value: boolean) => void;
   toggleTheme: () => void;
+  primaryColor: string;
+  setPrimaryColor: (value: string) => void;
 };
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);

@@ -13,16 +13,23 @@ import ThemeContext from '../src/theme/ThemeContext';
 export default function RootLayout() {
   const [isDark, setIsDark] = useState(false);
   const [themeReady, setThemeReady] = useState(false);
+  const [primaryColor, setPrimaryColor] = useState('#6750A4');
 
   useEffect(() => {
     initDatabase().catch(() => undefined);
   }, []);
 
   useEffect(() => {
-    AsyncStorage.getItem('gonext.theme')
-      .then((value) => {
-        if (value === 'dark') {
+    Promise.all([
+      AsyncStorage.getItem('gonext.theme'),
+      AsyncStorage.getItem('gonext.primaryColor'),
+    ])
+      .then(([themeValue, colorValue]) => {
+        if (themeValue === 'dark') {
           setIsDark(true);
+        }
+        if (colorValue) {
+          setPrimaryColor(colorValue);
         }
       })
       .catch(() => undefined)
@@ -33,17 +40,22 @@ export default function RootLayout() {
     AsyncStorage.setItem('gonext.theme', isDark ? 'dark' : 'light').catch(() => undefined);
   }, [isDark]);
 
+  useEffect(() => {
+    AsyncStorage.setItem('gonext.primaryColor', primaryColor).catch(() => undefined);
+  }, [primaryColor]);
+
   const theme = useMemo(() => {
     const base = isDark ? MD3DarkTheme : MD3LightTheme;
     return {
       ...base,
       colors: {
         ...base.colors,
+        primary: primaryColor,
         background: 'transparent',
         surface: 'transparent',
       },
     };
-  }, [isDark]);
+  }, [isDark, primaryColor]);
 
   useEffect(() => {
     if (Platform.OS !== 'web') return;
@@ -72,6 +84,8 @@ export default function RootLayout() {
         isDark,
         setIsDark,
         toggleTheme: () => setIsDark((prev) => !prev),
+        primaryColor,
+        setPrimaryColor,
       }}
     >
       <PaperProvider theme={theme}>
