@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { ScrollView } from 'react-native';
 import { router } from 'expo-router';
 import { Appbar, Button, Surface, Text } from 'react-native-paper';
 
@@ -10,12 +10,12 @@ export default function TripsScreen() {
         <Appbar.Content title="Поездки" />
       </Appbar.Header>
 
-      <View style={{ flex: 1, padding: 16, gap: 12 }}>
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 16, gap: 12 }}>
         <Text>Список поездок будет здесь.</Text>
         <Button mode="contained" onPress={() => router.push('/trips/1')}>
           Открыть пример поездки
         </Button>
-      </View>
+      </ScrollView>
     </Surface>
   );
 }

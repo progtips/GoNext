@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { ScrollView } from 'react-native';
 import { router } from 'expo-router';
 import { Appbar, Surface, Text } from 'react-native-paper';
 
@@ -10,9 +10,9 @@ export default function SettingsScreen() {
         <Appbar.Content title="Настройки" />
       </Appbar.Header>
 
-      <View style={{ flex: 1, padding: 16, gap: 12 }}>
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 16, gap: 12 }}>
         <Text>Настройки будут добавлены в следующих версиях.</Text>
-      </View>
+      </ScrollView>
     </Surface>
   );
 }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Alert, Image, View } from 'react-native';
+import { Alert, Image, ScrollView, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import { Appbar, Button, Surface, Text } from 'react-native-paper';
@@ -99,7 +99,11 @@ export default function PlaceDetailsScreen() {
         ) : null}
       </Appbar.Header>
 
-      <View style={{ flex: 1, padding: 16, gap: 12 }}>
+      <ScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={{ padding: 16, gap: 12 }}
+        showsVerticalScrollIndicator
+      >
         {place ? (
           <>
             <Text variant="titleMedium">{place.name}</Text>
@@ -139,7 +143,7 @@ export default function PlaceDetailsScreen() {
             ))
           )}
         </Surface>
-      </View>
+      </ScrollView>
     </Surface>
   );
 }

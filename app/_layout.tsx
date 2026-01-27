@@ -1,7 +1,7 @@
 import '../global.css';
 
 import { useEffect } from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import { ImageBackground, Platform, StyleSheet, View } from 'react-native';
 import { Stack } from 'expo-router';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { PaperProvider, MD3LightTheme } from 'react-native-paper';
@@ -41,15 +41,21 @@ export default function RootLayout() {
 
   return (
     <PaperProvider theme={theme}>
-      <SafeAreaProvider>
-        <View style={styles.root}>
-          <Stack
-            screenOptions={{
-              headerShown: false,
-              animation: 'none',
-              contentStyle: { backgroundColor: 'transparent' },
-            }}
-          />
+      <SafeAreaProvider style={styles.safeArea}>
+        <View style={styles.container}>
+          <ImageBackground
+            source={require('../assets/backgrounds/gonext-bg.png')}
+            style={styles.background}
+            resizeMode="cover"
+          >
+            <Stack
+              screenOptions={{
+                headerShown: false,
+                animation: 'none',
+                contentStyle: { backgroundColor: 'transparent' },
+              }}
+            />
+          </ImageBackground>
         </View>
       </SafeAreaProvider>
     </PaperProvider>
@@ -57,8 +63,13 @@ export default function RootLayout() {
 }
 
 const styles = StyleSheet.create({
-  root: {
+  safeArea: {
     flex: 1,
-    backgroundColor: 'transparent',
+  },
+  container: {
+    flex: 1,
+  },
+  background: {
+    flex: 1,
   },
 });

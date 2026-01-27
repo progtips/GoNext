@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { ScrollView } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Appbar, Button, Surface, Switch, Text, TextInput } from 'react-native-paper';
 
@@ -54,7 +54,7 @@ export default function EditPlaceScreen() {
         <Appbar.Content title="Редактировать место" />
       </Appbar.Header>
 
-      <View style={{ flex: 1, padding: 16, gap: 12 }}>
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 16, gap: 12 }}>
         <TextInput label="Название" value={name} onChangeText={setName} />
         <TextInput
           label="Описание"
@@ -77,7 +77,7 @@ export default function EditPlaceScreen() {
         <Button mode="contained" onPress={handleSave}>
           Сохранить изменения
         </Button>
-      </View>
+      </ScrollView>
     </Surface>
   );
 }

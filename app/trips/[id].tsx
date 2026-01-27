@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { ScrollView } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Appbar, Surface, Text } from 'react-native-paper';
 
@@ -12,9 +12,9 @@ export default function TripDetailsScreen() {
         <Appbar.Content title="Поездка" />
       </Appbar.Header>
 
-      <View style={{ flex: 1, padding: 16, gap: 12 }}>
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 16, gap: 12 }}>
         <Text>Детали поездки: {id}</Text>
-      </View>
+      </ScrollView>
     </Surface>
   );
 }
