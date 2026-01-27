@@ -35,3 +35,10 @@ export type PlacePhoto = {
   uri: string;
   createdAt: string;
 };
+
+export type TripPlacePhoto = {
+  id: number;
+  tripPlaceId: number;
+  uri: string;
+  createdAt: string;
+};

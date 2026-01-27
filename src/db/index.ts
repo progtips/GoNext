@@ -1,7 +1,7 @@
 import { openDatabaseAsync, SQLiteDatabase } from 'expo-sqlite';
 
 import { migrations, schemaVersion } from './schema';
-import { Place, PlacePhoto, Trip, TripPlace } from './types';
+import { Place, PlacePhoto, Trip, TripPlace, TripPlacePhoto } from './types';
 
 let dbPromise: Promise<SQLiteDatabase> | null = null;
 
@@ -92,6 +92,13 @@ const mapTripPlace = (row: any): TripPlace => ({
 const mapPlacePhoto = (row: any): PlacePhoto => ({
   id: row.id,
   placeId: row.place_id,
+  uri: row.uri,
+  createdAt: row.created_at,
+});
+
+const mapTripPlacePhoto = (row: any): TripPlacePhoto => ({
+  id: row.id,
+  tripPlaceId: row.trip_place_id,
   uri: row.uri,
   createdAt: row.created_at,
 });
@@ -198,6 +205,37 @@ export const deletePlace = async (placeId: number) => {
   });
 };
 
+export const updateTrip = async (
+  tripId: number,
+  updates: {
+    title: string;
+    description?: string;
+    startDate?: string;
+    endDate?: string;
+    current?: boolean;
+  }
+) => {
+  const db = await getDatabase();
+  await withTransaction(db, async () => {
+    if (updates.current) {
+      await db.runAsync('UPDATE trips SET current = 0');
+    }
+    await db.runAsync(
+      `UPDATE trips
+       SET title = ?, description = ?, start_date = ?, end_date = ?, current = ?
+       WHERE id = ?`,
+      [
+        updates.title,
+        updates.description ?? null,
+        updates.startDate ?? null,
+        updates.endDate ?? null,
+        updates.current ? 1 : 0,
+        tripId,
+      ]
+    );
+  });
+};
+
 export const getTrips = async (): Promise<Trip[]> => {
   const db = await getDatabase();
   const rows = await db.getAllAsync<any>('SELECT * FROM trips ORDER BY created_at DESC');
@@ -262,6 +300,19 @@ export const addTripPlace = async (tripId: number, placeId: number) => {
   return result.lastInsertRowId ?? null;
 };
 
+export const swapTripPlaceOrder = async (
+  firstId: number,
+  firstOrder: number,
+  secondId: number,
+  secondOrder: number
+) => {
+  const db = await getDatabase();
+  await withTransaction(db, async () => {
+    await db.runAsync('UPDATE trip_places SET order_index = ? WHERE id = ?', [secondOrder, firstId]);
+    await db.runAsync('UPDATE trip_places SET order_index = ? WHERE id = ?', [firstOrder, secondId]);
+  });
+};
+
 export const getTripPlaces = async (tripId: number) => {
   const db = await getDatabase();
   const rows = await db.getAllAsync<any>(
@@ -278,6 +329,32 @@ export const getTripPlaces = async (tripId: number) => {
   }));
 };
 
+export const getTripPlaceById = async (tripPlaceId: number) => {
+  const db = await getDatabase();
+  const rows = await db.getAllAsync<any>(
+    `SELECT tp.*, p.name as place_name, p.description as place_description, p.dd
+     FROM trip_places tp
+     JOIN places p ON p.id = tp.place_id
+     WHERE tp.id = ?`,
+    [tripPlaceId]
+  );
+  const row = rows[0];
+  if (!row) {
+    return null;
+  }
+  return {
+    ...mapTripPlace(row),
+    placeName: row.place_name as string,
+    placeDescription: row.place_description as string | null,
+    dd: row.dd as string | null,
+  };
+};
+
+export const updateTripPlaceNotes = async (tripPlaceId: number, notes: string | null) => {
+  const db = await getDatabase();
+  await db.runAsync('UPDATE trip_places SET notes = ? WHERE id = ?', [notes, tripPlaceId]);
+};
+
 export const markTripPlaceVisited = async (tripPlaceId: number) => {
   const db = await getDatabase();
   const visitDate = new Date().toISOString();
@@ -285,6 +362,52 @@ export const markTripPlaceVisited = async (tripPlaceId: number) => {
     'UPDATE trip_places SET visited = 1, visit_date = ? WHERE id = ?',
     [visitDate, tripPlaceId]
   );
+};
+
+export const getTripPlacePhotos = async (tripPlaceId: number): Promise<TripPlacePhoto[]> => {
+  const db = await getDatabase();
+  const rows = await db.getAllAsync<any>(
+    'SELECT * FROM trip_place_photos WHERE trip_place_id = ? ORDER BY created_at DESC',
+    [tripPlaceId]
+  );
+  return rows.map(mapTripPlacePhoto);
+};
+
+export const addTripPlacePhoto = async (tripPlaceId: number, uri: string) => {
+  const db = await getDatabase();
+  const createdAt = new Date().toISOString();
+  const result = await db.runAsync(
+    `INSERT INTO trip_place_photos (trip_place_id, uri, created_at)
+     VALUES (?, ?, ?)`,
+    [tripPlaceId, uri, createdAt]
+  );
+  return result.lastInsertRowId ?? null;
+};
+
+export const deleteTripPlacePhoto = async (photoId: number) => {
+  const db = await getDatabase();
+  await db.runAsync('DELETE FROM trip_place_photos WHERE id = ?', [photoId]);
+};
+
+export const deleteTripPlace = async (tripPlaceId: number) => {
+  const db = await getDatabase();
+  await withTransaction(db, async () => {
+    await db.runAsync('DELETE FROM trip_place_photos WHERE trip_place_id = ?', [tripPlaceId]);
+    await db.runAsync('DELETE FROM trip_places WHERE id = ?', [tripPlaceId]);
+  });
+};
+
+export const deleteTrip = async (tripId: number) => {
+  const db = await getDatabase();
+  await withTransaction(db, async () => {
+    await db.runAsync(
+      `DELETE FROM trip_place_photos
+       WHERE trip_place_id IN (SELECT id FROM trip_places WHERE trip_id = ?)`,
+      [tripId]
+    );
+    await db.runAsync('DELETE FROM trip_places WHERE trip_id = ?', [tripId]);
+    await db.runAsync('DELETE FROM trips WHERE id = ?', [tripId]);
+  });
 };
 
 export const getNextTripPlace = async () => {
